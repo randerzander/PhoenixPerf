@@ -18,7 +18,41 @@ create table test(
 );
 ```
 
-**Run**
+**Using sqlline to create the test table**
+```
+# If ZooKeeper is not running on 'localhost', use the fqdn of one of your hosts actually running ZooKeeper server
+bash-4.1# /usr/hdp/current/phoenix-client/bin/sqlline.py localhost:2181:/hbase-unsecure
+Setting property: [isolation, TRANSACTION_READ_COMMITTED]
+issuing: !connect jdbc:phoenix:localhost:2181:/hbase-unsecure none none org.apache.phoenix.jdbc.PhoenixDriver
+Connecting to jdbc:phoenix:localhost:2181:/hbase-unsecure
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.4.0-3485/phoenix/phoenix-4.4.0.2.3.4.0-3485-client.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/2.3.4.0-3485/hadoop/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+16/01/22 09:38:36 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+16/01/22 09:38:37 WARN shortcircuit.DomainSocketFactory: The short-circuit local reads feature cannot be used because libhadoop cannot be loaded.
+Connected to: Phoenix (version 4.4)
+Driver: PhoenixEmbeddedDriver (version 4.4)
+Autocommit status: true
+Transaction isolation: TRANSACTION_READ_COMMITTED
+Building list of tables and columns for tab-completion (set fastconnect to true to skip)...
+87/87 (100%) Done
+Done
+sqlline version 1.1.8
+0: jdbc:phoenix:localhost:2181:/hbase-unsecur> drop table test;
+No rows affected (3.779 seconds)
+0: jdbc:phoenix:localhost:2181:/hbase-unsecur> create table test(
+. . . . . . . . . . . . . . . . . . . . . . .>   cust_id integer not null,
+. . . . . . . . . . . . . . . . . . . . . . .>   process_id integer not null,
+. . . . . . . . . . . . . . . . . . . . . . .>   doc_id integer not null,
+. . . . . . . . . . . . . . . . . . . . . . .>   val bigint,
+. . . . . . . . . . . . . . . . . . . . . . .>   constraint my_pk primary key (cust_id, process_id, doc_id)
+. . . . . . . . . . . . . . . . . . . . . . .> );
+No rows affected (1.322 seconds)
+0: jdbc:phoenix:localhost:2181:/hbase-unsecur>
+```
+
+**Run Performance Test**
 ```
 java -jar target/perf-1.0-SNAPSHOT.jar props
 ```
