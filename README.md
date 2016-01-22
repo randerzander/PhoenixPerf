@@ -19,8 +19,10 @@ create table test(
 ```
 
 **Using sqlline to create the test table**
+
+If ZooKeeper is not running on 'localhost', use the fqdn of one of your hosts actually running ZooKeeper server
+
 ```
-# If ZooKeeper is not running on 'localhost', use the fqdn of one of your hosts actually running ZooKeeper server
 bash-4.1# /usr/hdp/current/phoenix-client/bin/sqlline.py localhost:2181:/hbase-unsecure
 Setting property: [isolation, TRANSACTION_READ_COMMITTED]
 issuing: !connect jdbc:phoenix:localhost:2181:/hbase-unsecure none none org.apache.phoenix.jdbc.PhoenixDriver
