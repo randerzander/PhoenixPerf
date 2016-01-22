@@ -5,6 +5,19 @@ mvn clean package
 
 Test configuration is specified using the 'props' Java properties file.
 
+Make sure to define your table before running and update the upsert statement logic generation if you use a table definition different than the below.
+
+**Example DDL**
+```
+create table test(
+  cust_id integer not null,
+  process_id integer not null,
+  doc_id integer not null,
+  val bigint,
+  constraint my_pk primary key (cust_id, process_id, doc_id)
+);
+```
+
 **Run**
 ```
 java -jar target/perf-1.0-SNAPSHOT.jar props
