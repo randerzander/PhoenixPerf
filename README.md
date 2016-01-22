@@ -20,7 +20,7 @@ create table test(
 
 **Using sqlline to create the test table**
 
-If ZooKeeper is not running on 'localhost', use the fqdn of one of your hosts actually running ZooKeeper server
+If ZooKeeper is not running on 'localhost', use the fully qualified domain name of one of your hosts running a ZooKeeper server instance
 
 ```
 bash-4.1# /usr/hdp/current/phoenix-client/bin/sqlline.py localhost:2181:/hbase-unsecure
@@ -60,6 +60,7 @@ java -jar target/perf-1.0-SNAPSHOT.jar props
 ```
 
 **Sample Output, 10 Threads with 10 repetitions writing 10k records, committing every 5 writes**
+
 The below was generated using the included 'props' file on a 10 year old PowerEdge 1950 with 4 cores and 32GB RAM.
 
 With 10 threads, committing every 5 records, the apparent aggregate write-rate is about 10k/sec.
