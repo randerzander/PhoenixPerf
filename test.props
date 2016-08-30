@@ -1,3 +1,4 @@
+preQueryFile=preQueries.sql
 jdbc.url=jdbc:phoenix:ambari.docker:2181:/hbase-unsecure
 repetitions=10
 records=10000

@@ -4,7 +4,9 @@ import java.sql.*;
 import org.apache.phoenix.jdbc.PhoenixDriver;
 
 import java.util.Properties;
+import java.util.Scanner;
 import java.io.FileReader;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,9 +53,16 @@ public class PhoenixPerf {
     HashMap<String, String> props = getPropertiesMap(args[0]);
 
     try {
+      //Load and run setup statements
+      String preQueries = new Scanner(new File(props.get("preQueryFile"))).useDelimiter("\\Z").next();
       Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
-    } catch (ClassNotFoundException ex) {
-      System.out.println("Error: unable to load driver class!");
+      Connection connection = DriverManager.getConnection(props.get("jdbc.url"), "", "");
+      for (String query : preQueries.split(";")){
+        System.out.println("Running PreQuery: " + query);
+        connection.createStatement().execute(query);
+      }
+    } catch (Exception ex) {
+      System.out.println("Error: unable to load driver and run preQueries: " + ex.toString());
       System.exit(1);
     }
     for (int i = 0; i < Integer.parseInt(props.get("threads")); i++){
