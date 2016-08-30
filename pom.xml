@@ -25,7 +25,7 @@
     </repositories>
 
     <properties>
-      <phoenix.version>4.4.0.2.3.4.0-3485</phoenix.version>
+      <phoenix.version>4.7.0-HBase-1.1</phoenix.version>
     </properties>
 
     <dependencies>
