@@ -1,0 +1,8 @@
+preQueryFile=preQueries.sql
+jdbc.url=jdbc:phoenix:localhost:2181:/hbase-unsecure
+repetitions=10
+count=10000
+commitInterval=5
+writeTable=test
+autocommit=false
+writeThreads=10

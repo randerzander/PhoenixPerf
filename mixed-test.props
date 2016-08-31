@@ -1,0 +1,22 @@
+# The preQueries file should include semi-colons at the end of each statement
+preQueryFile=preQueries.sql
+
+jdbc.url=jdbc:phoenix:localhost:2181:/hbase-unsecure
+
+# Number of times to repeat the test per thread
+repetitions=10
+# Number of upserts/queries to issue per test
+count=10000
+
+# If true, upserts are committed on every write
+autocommit=false
+# If autocommit=false, commitInterval specifies how many writes to perform before committing a batch
+commitInterval=5
+writeTable=test
+writeThreads=5
+
+readThreads=5
+# The queries file should include semi-colons at the end of each query
+# readThreads will cycle through all queries sequentially
+# With a count of 100 and 4 queries in the file, each query will run 25 times per test
+readQueryFile=readQueries.sql

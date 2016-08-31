@@ -1,0 +1,5 @@
+jdbc.url=jdbc:phoenix:localhost:2181:/hbase-unsecure
+repetitions=10
+count=10000
+readThreads=10
+readQueryFile=readQueries.sql

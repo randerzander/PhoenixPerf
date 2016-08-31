@@ -22,47 +22,64 @@ create table test(
 );
 ```
 
-**Using sqlline to create the test table**
-
-If ZooKeeper is not running on 'localhost', use the fully qualified domain name of one of your hosts running a ZooKeeper server instance
-
 **Run Performance Test**
 ```
-java -jar target/perf-1.0-SNAPSHOT.jar test.props
+#See mixed-test.props for comments on the function of each property.
+java -jar target/perf-1.0-SNAPSHOT.jar mixed-test.props
 ```
 
-**Sample Output, 10 Threads with 10 repetitions writing 10k records, committing every 5 writes**
+**Sample Output, 5 write and 5 read threads, 10 repetitions writing 1k count per rep, committing every 5 writes**
 
-The below was generated using the included 'props' file on a 10 year old PowerEdge 1950 with 4 cores and 32GB RAM.
-
-With 10 threads, committing every 5 records, the apparent aggregate write-rate is about 10k/sec.
+The below was generated using the included 'props' file on a 2014 MacBook Pro. With simultaneous reads & writes, a single-node achieved about 650 upserts/sec and 440 queries per sec.
 ```
-THREAD 8 rep 8 of 10: 10000 / 7.619866212 = 1312.358999722553
-THREAD 0 rep 8 of 10: 10000 / 7.626117367 = 1311.2832544739408
-THREAD 6 rep 8 of 10: 10000 / 7.600011494 = 1315.7874837287713
-THREAD 3 rep 8 of 10: 10000 / 7.579436939 = 1319.3592189605788
-THREAD 2 rep 8 of 10: 10000 / 7.612197026 = 1313.6811837429182
-THREAD 4 rep 8 of 10: 10000 / 7.611259816 = 1313.8429434478787
-THREAD 5 rep 8 of 10: 10000 / 7.622023349 = 1311.9875841513904
-THREAD 7 rep 8 of 10: 10000 / 7.676222231 = 1302.7241394361347
-THREAD 1 rep 9 of 10: 10000 / 7.856362998 = 1272.8536095577188
-THREAD 0 rep 9 of 10: 10000 / 7.795843603 = 1282.7348147610087
-THREAD 8 rep 9 of 10: 10000 / 7.811032197 = 1280.2405300340104
-THREAD 9 rep 9 of 10: 10000 / 7.822039608 = 1278.4389367924562
-THREAD 6 rep 9 of 10: 10000 / 7.812644346 = 1279.9763507883097
-THREAD 3 rep 9 of 10: 10000 / 7.810771386 = 1280.283278796761
-THREAD 2 rep 9 of 10: 10000 / 7.803939991 = 1281.4040102220977
-THREAD 4 rep 9 of 10: 10000 / 7.799588775 = 1282.1188768378368
-THREAD 5 rep 9 of 10: 10000 / 7.767940092 = 1287.3425749380767
-THREAD 7 rep 9 of 10: 10000 / 7.639059383 = 1309.0616918431147
-DONE: 1: 100000 / 95.245927626 = 1049.9136550243672
-DONE: 0: 100000 / 95.298194457 = 1049.3378239723265
-DONE: 8: 100000 / 95.307640185 = 1049.2338264371224
-DONE: 9: 100000 / 95.309206742 = 1049.2165806258138
-DONE: 6: 100000 / 95.329534528 = 1048.992848807294
-DONE: 3: 100000 / 95.349075126 = 1048.7778708692663
-DONE: 2: 100000 / 95.35425241 = 1048.720927201279
-DONE: 4: 100000 / 95.353370193 = 1048.730630051093
-DONE: 5: 100000 / 95.370020974 = 1048.5475307514323
-DONE: 7: 100000 / 95.392204617 = 1048.30368898067
+WRITE THREAD 2 rep 8 of 10: 1000 / 1.376693614 = 726 upserts/sec
+WRITE THREAD 1 rep 8 of 10: 1000 / 1.381533831 = 724 upserts/sec
+WRITE THREAD 4 rep 8 of 10: 1000 / 1.393602211 = 718 upserts/sec
+WRITE THREAD 0 rep 8 of 10: 1000 / 1.44201247 = 693 upserts/sec
+WRITE THREAD 3 rep 8 of 10: 1000 / 1.402683061 = 713 upserts/sec
+WRITE THREAD 1 rep 9 of 10: 1000 / 1.170773649 = 854 upserts/sec
+WRITE THREAD 2 rep 9 of 10: 1000 / 1.290999103 = 775 upserts/sec
+WRITE THREAD 4 rep 9 of 10: 1000 / 1.213860169 = 824 upserts/sec
+WRITE THREAD 3 rep 9 of 10: 1000 / 1.136755893 = 880 upserts/sec
+WRITE THREAD 0 rep 9 of 10: 1000 / 1.230584087 = 813 upserts/sec
+READ THREAD 1 rep 4 of 10: 1000 / 2.324400585 = 430 qps
+READ THREAD 4 rep 4 of 10: 1000 / 2.146260529 = 466 qps
+READ THREAD 3 rep 4 of 10: 1000 / 1.993750249 = 502 qps
+READ THREAD 2 rep 4 of 10: 1000 / 2.089134783 = 479 qps
+READ THREAD 0 rep 4 of 10: 1000 / 2.080175987 = 481 qps
+READ THREAD 1 rep 5 of 10: 1000 / 1.265383209 = 790 qps
+READ THREAD 4 rep 5 of 10: 1000 / 1.277487047 = 783 qps
+READ THREAD 0 rep 5 of 10: 1000 / 1.128897183 = 886 qps
+READ THREAD 3 rep 5 of 10: 1000 / 1.315074737 = 760 qps
+READ THREAD 2 rep 5 of 10: 1000 / 1.235333713 = 809 qps
+READ THREAD 0 rep 6 of 10: 1000 / 0.99553133 = 1004 qps
+READ THREAD 1 rep 6 of 10: 1000 / 1.185390286 = 844 qps
+READ THREAD 3 rep 6 of 10: 1000 / 1.021614066 = 979 qps
+READ THREAD 2 rep 6 of 10: 1000 / 1.096592781 = 912 qps
+READ THREAD 4 rep 6 of 10: 1000 / 1.200709482 = 833 qps
+READ THREAD 0 rep 7 of 10: 1000 / 2.232705343 = 448 qps
+WRITE DONE: 1: 10000 / 15.222851002 = 657 upserts/sec
+READ THREAD 3 rep 7 of 10: 1000 / 2.229323884 = 449 qps
+WRITE DONE: 2: 10000 / 15.285020921 = 654 upserts/sec
+READ THREAD 1 rep 7 of 10: 1000 / 2.255869767 = 443 qps
+WRITE DONE: 4: 10000 / 15.311429168 = 653 upserts/sec
+READ THREAD 2 rep 7 of 10: 1000 / 2.228224597 = 449 qps
+WRITE DONE: 3: 10000 / 15.39989397 = 649 upserts/sec
+WRITE DONE: 0: 10000 / 15.42180439 = 648 upserts/sec
+READ THREAD 4 rep 7 of 10: 1000 / 2.328714532 = 429 qps
+READ THREAD 0 rep 8 of 10: 1000 / 1.017816904 = 982 qps
+READ THREAD 1 rep 8 of 10: 1000 / 1.061889944 = 942 qps
+READ THREAD 3 rep 8 of 10: 1000 / 1.136866062 = 880 qps
+READ THREAD 2 rep 8 of 10: 1000 / 1.158624865 = 863 qps
+READ THREAD 4 rep 8 of 10: 1000 / 1.111212913 = 900 qps
+READ THREAD 0 rep 9 of 10: 1000 / 1.322511651 = 756 qps
+READ THREAD 1 rep 9 of 10: 1000 / 1.25272783 = 798 qps
+READ THREAD 3 rep 9 of 10: 1000 / 1.226200425 = 816 qps
+READ THREAD 2 rep 9 of 10: 1000 / 1.137293052 = 879 qps
+READ THREAD 4 rep 9 of 10: 1000 / 1.120653633 = 892 qps
+READ DONE: 0: 10000 / 22.536284347 = 444 qps
+READ DONE: 1: 10000 / 22.59488533 = 443 qps
+READ DONE: 3: 10000 / 22.630177862 = 442 qps
+READ DONE: 2: 10000 / 22.655865471 = 441 qps
+READ DONE: 4: 10000 / 22.719553975 = 440 qps
 ```
