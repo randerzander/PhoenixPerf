@@ -1,9 +1,18 @@
+The goals of this project are:
+
+1. Provide a simple example of a Java application interacting with [Apache Phoenix](http://phoenix.apache.org/) & [Apache HBase](http://hbase.apache.org/) via the Phoenix JDBC driver.
+2. Act as a flexible performance testing tool for a variety of read and write workloads
+
 **Build**
 ```
 mvn clean package
 ```
 
-Test configuration is specified using the 'test.props' Java properties file.
+**Run Performance Test**
+```
+#See mixed-test.props for comments on the function of each property.
+java -jar target/perf-1.0-SNAPSHOT.jar mixed-test.props
+```
 
 To run a series of prep queries defined in a file, point the "preQueryFile" prop to it.
 
@@ -20,12 +29,6 @@ create table test(
   val bigint,
   constraint my_pk primary key (cust_id, process_id, doc_id)
 );
-```
-
-**Run Performance Test**
-```
-#See mixed-test.props for comments on the function of each property.
-java -jar target/perf-1.0-SNAPSHOT.jar mixed-test.props
 ```
 
 **Sample Output, 5 write and 5 read threads, 10 repetitions writing 1k count per rep, committing every 5 writes**
