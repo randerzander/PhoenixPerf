@@ -2,7 +2,7 @@
 preQueryFile=preQueries.sql
 
 # Thick Client JDBC string
-#jdbc.url=jdbc:phoenix:dn0:2181:/hbase
+#jdbc.url=jdbc:phoenix:localhost:2181:/hbase
 # Thin Client JDBC string
 jdbc.url=jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
 
