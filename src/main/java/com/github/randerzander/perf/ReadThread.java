@@ -1,7 +1,6 @@
 package com.github.randerzander.perf;
 
 import java.sql.*;
-import org.apache.phoenix.jdbc.PhoenixDriver;
 
 import java.util.Properties;
 import java.util.Scanner;
@@ -30,7 +29,12 @@ public class ReadThread implements Runnable {
       long start = System.nanoTime();
       for (int i = 0; i < repetitions; i++){
         long t1 = System.nanoTime();
-        for (int j = 0; j < count; j++) connection.createStatement().execute(queries[i % queries.length]);
+        for (int j = 0; j < count; j++){
+          //connection.createStatement().execute(queries[i % queries.length]);
+          Statement stmt = connection.createStatement();
+          stmt.executeQuery(queries[i % queries.length]);
+          stmt.close();
+        }
         double seconds = (double)(System.nanoTime() - t1) / 1000000000.0;
         System.out.println("READ THREAD " + threadId + " rep " + i + " of " + repetitions + ": " + count + " / " + String.valueOf(seconds) + " = " + String.valueOf(Math.round(count/seconds)) + " qps");
       }

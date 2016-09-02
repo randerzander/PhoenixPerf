@@ -1,5 +1,8 @@
-jdbc.url=jdbc:phoenix:localhost:2181:/hbase-unsecure
-repetitions=10
-count=10000
-readThreads=10
+# Thick Client JDBC string
+#jdbc.url=jdbc:phoenix:localhost:2181:/hbase
+# Thin Client JDBC string
+jdbc.url=jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
+repetitions=100
+count=10
+readThreads=1
 readQueryFile=readQueries.sql

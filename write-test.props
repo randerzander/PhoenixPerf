@@ -1,8 +1,11 @@
 preQueryFile=preQueries.sql
-jdbc.url=jdbc:phoenix:localhost:2181:/hbase-unsecure
-repetitions=10
+# Thick Client JDBC string
+#jdbc.url=jdbc:phoenix:localhost:2181:/hbase
+# Thin Client JDBC string
+jdbc.url=jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
+repetitions=5
 count=10000
-commitInterval=5
+commitInterval=15
 writeTable=test
 autocommit=false
 writeThreads=10

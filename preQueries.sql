@@ -1,5 +1,4 @@
 drop table if exists test;
-
 create table test(
   cust_id integer not null,
   process_id integer not null,

@@ -1,7 +1,6 @@
 package com.github.randerzander.perf;
 
 import java.sql.*;
-import org.apache.phoenix.jdbc.PhoenixDriver;
 
 import java.util.Properties;
 import java.util.Scanner;

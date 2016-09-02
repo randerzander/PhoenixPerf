@@ -1,7 +1,10 @@
 # The preQueries file should include semi-colons at the end of each statement
 preQueryFile=preQueries.sql
 
-jdbc.url=jdbc:phoenix:localhost:2181:/hbase-unsecure
+# Thick Client JDBC string
+#jdbc.url=jdbc:phoenix:dn0:2181:/hbase
+# Thin Client JDBC string
+jdbc.url=jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
 
 # Number of times to repeat the test per thread
 repetitions=10

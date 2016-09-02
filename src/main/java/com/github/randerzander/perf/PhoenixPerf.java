@@ -4,7 +4,6 @@ import com.github.randerzander.perf.WriteThread;
 import com.github.randerzander.perf.ReadThread;
 
 import java.sql.*;
-import org.apache.phoenix.jdbc.PhoenixDriver;
 
 import java.util.Properties;
 import java.util.Scanner;
@@ -19,8 +18,6 @@ public class PhoenixPerf {
     HashMap<String, String> props = getPropertiesMap(args[0]);
 
     try {
-      System.out.println("Loading Phoenix JDBC Driver");
-      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
       System.out.println("Opening connection to: " + props.get("jdbc.url"));
       Connection connection = DriverManager.getConnection(props.get("jdbc.url"), "", "");
       //Load and run setup statements
