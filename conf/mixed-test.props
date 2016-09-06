@@ -1,5 +1,7 @@
+recordPerf=true
 # The preQueries file should include semi-colons at the end of each statement
-preQueryFile=preQueries.sql
+preQueryFile=conf/preQueries.sql
+# Specifies whether to write each thread's results into "perf" table
 
 # Thick Client JDBC string
 #jdbc.url=jdbc:phoenix:localhost:2181:/hbase
@@ -22,4 +24,4 @@ readThreads=5
 # The queries file should include semi-colons at the end of each query
 # readThreads will cycle through all queries sequentially
 # With a count of 100 and 4 queries in the file, each query will run 25 times per test
-readQueryFile=readQueries.sql
+readQueryFile=conf/readQueries.sql

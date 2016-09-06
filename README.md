@@ -13,22 +13,26 @@ mvn clean package
 mvn clean package -P thick
 ```
 
-**Run Write Performance Test**
+***Running Performance Tests***
+
+**Write Performance Test**
 ```
 #See mixed-test.props for comments on the function of each property.
-java -jar target/perf-1.0-SNAPSHOT.jar write-test.props
+java -jar target/perf-1.0-SNAPSHOT.jar conf/write-test.props
 ```
 
-**Run Read Performance Test**
+Write tests include population of a table with "random" values. Modify WriteThread.java as needed to control how this dummy data is generated.
+
+**Read Performance Test**
 ```
 #See mixed-test.props for comments on the function of each property.
-java -jar target/perf-1.0-SNAPSHOT.jar read-test.props
+java -jar target/perf-1.0-SNAPSHOT.jar conf/read-test.props
 ```
 
-**Run Simultaneous Read/Write Performance Test**
+**Simultaneous Read/Write Performance Test**
 ```
 #See mixed-test.props for comments on the function of each property.
-java -jar target/perf-1.0-SNAPSHOT.jar mixed-test.props
+java -jar target/perf-1.0-SNAPSHOT.jar conf/mixed-test.props
 ```
 
 To run a series of prep queries defined in a file, point the "preQueryFile" prop to it.
@@ -105,6 +109,4 @@ READ DONE: 4: 10000 / 22.719553975 = 440 qps
 ```
 
 #ToDo:
-1. Support writing random data based on target table schema
-2. Support per readQuery performance measurement
-3. More examples demonstrating differences between read/write performance for various primary key and indexing strategies
+1. More examples demonstrating differences between read/write performance for various primary key and indexing strategies

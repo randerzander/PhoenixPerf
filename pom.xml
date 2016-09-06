@@ -28,19 +28,20 @@
       <phoenix.version>4.7.0-HBase-1.1</phoenix.version>
     </properties>
 
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.phoenix</groupId>
+        <artifactId>phoenix-server-client</artifactId>
+        <version>${phoenix.version}</version>
+      </dependency>
+    </dependencies>
+
     <profiles>
         <profile>
           <id>thin</id>
           <activation>
             <activeByDefault>true</activeByDefault>
           </activation>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.phoenix</groupId>
-              <artifactId>phoenix-server-client</artifactId>
-              <version>${phoenix.version}</version>
-            </dependency>
-          </dependencies>
         </profile>
         <profile>
           <id>thick</id>
