@@ -1,6 +1,7 @@
+testName=mixed-rw
 recordPerf=true
 # The preQueries file should include semi-colons at the end of each statement
-preQueryFile=conf/preQueries.sql
+setupQueryDir=conf/setup/indexed
 # Specifies whether to write each thread's results into "perf" table
 
 # Thick Client JDBC string
@@ -11,17 +12,17 @@ jdbc.url=jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
 # Number of times to repeat the test per thread
 repetitions=10
 # Number of upserts/queries to issue per test
-count=10000
+writeCount=1000
+readCount=100
 
 # If true, upserts are committed on every write
 autocommit=false
 # If autocommit=false, commitInterval specifies how many writes to perform before committing a batch
-commitInterval=5
+commitInterval=15
 writeTable=test
 writeThreads=5
+maxVal=10000
 
 readThreads=5
-# The queries file should include semi-colons at the end of each query
-# readThreads will cycle through all queries sequentially
-# With a count of 100 and 4 queries in the file, each query will run 25 times per test
-readQueryFile=conf/readQueries.sql
+# readThreads will each be assigned one query from readQueryDir
+readQueryDir=conf/queries

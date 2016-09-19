@@ -1,10 +1,15 @@
-testName=read-test
+testName=write-indexed
 recordPerf=true
+setupQueryDir=conf/setup/indexed
 # Thick Client JDBC string
 #jdbc.url=jdbc:phoenix:localhost:2181:/hbase
 # Thin Client JDBC string
 jdbc.url=jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
-repetitions=100
-count=10
-readThreads=1
-readQueryFile=conf/readQueries.sql
+writeTable=DOCUMENTS
+
+repetitions=25
+writeCount=10000
+commitInterval=100
+autocommit=false
+writeThreads=5
+maxVal=10000

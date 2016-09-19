@@ -1,0 +1,10 @@
+testName=read-default
+recordPerf=true
+# Thick Client JDBC string
+#jdbc.url=jdbc:phoenix:localhost:2181:/hbase
+# Thin Client JDBC string
+jdbc.url=jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
+repetitions=100
+readCount=100
+readThreads=10
+readQueryDir=conf/queries

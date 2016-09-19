@@ -1,14 +1,15 @@
-testName=write-test
+testName=write-default
 recordPerf=true
-preQueryFile=conf/preQueries.sql
+setupQueryDir=conf/setup/default
 # Thick Client JDBC string
 #jdbc.url=jdbc:phoenix:localhost:2181:/hbase
 # Thin Client JDBC string
 jdbc.url=jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
-writeTable=TEST
+writeTable=DOCUMENTS
 
-repetitions=30
-count=10000
-commitInterval=5
+repetitions=25
+writeCount=10000
+commitInterval=100
 autocommit=false
-writeThreads=10
+writeThreads=5
+maxVal=10000

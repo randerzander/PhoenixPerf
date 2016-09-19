@@ -21,16 +21,19 @@ public class PhoenixPerf {
       System.out.println("Opening connection to: " + props.get("jdbc.url"));
       Connection connection = DriverManager.getConnection(props.get("jdbc.url"), "", "");
       //Load and run setup statements
-      if (props.get("preQueryFile") != null){
-        System.out.println("Loading setup queries from: " + props.get("preQueryFile"));
-        String preQueries = new Scanner(new File(props.get("preQueryFile"))).useDelimiter("\\Z").next();
-        for (String query : preQueries.split(";")){
-          System.out.println("Running PreQuery: " + query);
-          connection.createStatement().execute(query);
+      if (props.get("setupQueryDir") != null){
+        for (File file : new File(props.get("setupQueryDir")).listFiles()) {
+            System.out.println("Running setup file: " + file.getPath());
+            try{
+              for (String statement : new Scanner(file).useDelimiter("\\Z").next().split(";")){
+                System.out.println("Running: \n" + statement);
+                connection.createStatement().execute(statement);
+              }
+            } catch (java.io.FileNotFoundException e) { e.printStackTrace(); System.exit(-1); }
         }
       }
     } catch (Exception ex) {
-      System.out.println("Error: unable to load driver and run preQueries: " + ex.toString());
+      System.out.println("Error: unable to load driver and run setup queries: " + ex.toString());
       System.exit(1);
     }
     if (props.get("writeThreads") != null)

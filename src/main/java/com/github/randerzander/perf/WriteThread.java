@@ -11,31 +11,36 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class WriteThread implements Runnable {
-  int threadId;
-  HashMap<String, String> props;
+  private int threadId;
+  private HashMap<String, String> props;
 
-  Connection connection;
-  int count;
-  int repetitions;
-  int commitInterval;
-  PreparedStatement statement;
-  ResultSetMetaData columns;
+  private Connection connection;
+  private int count;
+  private int repetitions;
+  private int commitInterval;
+  private PreparedStatement writeStatement;
+  private PreparedStatement perfStatement;
+  private ResultSetMetaData columns;
 
   boolean recordPerf;
-  String testName;
-  String metric;
+  private String testName;
+  private String metric;
+
+  private int maxVal;
 
   public WriteThread(int threadId, HashMap<String, String> props){
     this.threadId = threadId;
     this.props = props;
 
     repetitions = Integer.parseInt(props.get("repetitions"));
-    count = Integer.parseInt(props.get("count"));
+    count = Integer.parseInt(props.get("writeCount"));
     commitInterval = Integer.parseInt(props.get("commitInterval"));
 
     recordPerf = props.get("recordPerf").equalsIgnoreCase("true");
     testName = props.get("testName");
     metric = "writes/sec";
+
+    maxVal = Integer.parseInt(props.get("maxVal"));
 
     try{
       connection = DriverManager.getConnection(props.get("jdbc.url"), "", "");
@@ -55,7 +60,8 @@ public class WriteThread implements Runnable {
       }
       columnNames = columnNames.substring(0, columnNames.length() - 1) + ")";
       values = values.substring(0, values.length() - 1) + ")";
-      statement = connection.prepareStatement("upsert into " + writeTable + " " + columnNames + " values " + values);
+      writeStatement = connection.prepareStatement("upsert into " + writeTable + " " + columnNames + " values " + values);
+      perfStatement = connection.prepareStatement("upsert into perf values (?, ?, ?, ?, ?, ?)");
     } catch (SQLException e) { e.printStackTrace(); System.exit(-1); }
   }
 
@@ -70,23 +76,23 @@ public class WriteThread implements Runnable {
     }
 
     double seconds = (double)(System.nanoTime() - start) / 1000000000.0;
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     System.out.println("WRITE DONE: " + threadId + ": " + repetitions * count + " / " + String.valueOf(seconds) + " = " + String.valueOf(Math.round(repetitions*count/seconds)) + " upserts/sec");
   }
 
   private static String CharSet = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!@#$";
-  static public String randString(int len) {
+  private String randString(int len) {
     String str = "";
-    for (int a = 1; a <= len; a++) {
+    for (int a = 1; a <= Math.min(maxVal, randInt()); a++) {
       str += CharSet.charAt(new java.util.Random().nextInt(CharSet.length()));
     }
     return str;
   }
 
-  private int maxLen = 1000;
-  private int min = 1;
-  private int max = 10000;
   private int randInt(){
-    return ThreadLocalRandom.current().nextInt(min, max + 1);
+    return ThreadLocalRandom.current().nextInt(0, 10000 + 1);
   }
 
   private void fillStatement(){
@@ -94,13 +100,26 @@ public class WriteThread implements Runnable {
       for (int i = 1; i <= columns.getColumnCount(); i++){
         Object tmp = null;
         switch (columns.getColumnType(i)){
+          case Types.BINARY:
+          case Types.VARBINARY: tmp = randString(randInt()).getBytes(); break;
+
+          case Types.CHAR:
           case Types.VARCHAR: tmp = randString(randInt()); break;
-          case Types.INTEGER: tmp = randInt(); break;
-          case Types.DOUBLE: tmp = randInt(); break;
+
+          case Types.DOUBLE:
+          case Types.FLOAT:
+          case Types.REAL:
+          case Types.TINYINT:
+          case Types.SMALLINT:
+          case Types.INTEGER:
+          case Types.BIGINT: tmp = randInt(); break;
+
+          case Types.DATE:
+          case Types.TIME:
           case Types.TIMESTAMP: now(); break;
           default: break;
         }
-        statement.setObject(i, tmp);
+        writeStatement.setObject(i, tmp);
       }
     } catch (SQLException e) { e.printStackTrace(); System.exit(-1); }
   }
@@ -108,7 +127,8 @@ public class WriteThread implements Runnable {
   private void write(boolean commit){
     try{
       fillStatement();
-      if (commit) statement.executeUpdate();
+      writeStatement.executeUpdate();
+      if (commit) connection.commit();
     } catch (SQLException e) { e.printStackTrace(); }
   }
 
@@ -122,11 +142,17 @@ public class WriteThread implements Runnable {
   }
 
   private void perf(int threadId, int rep, long t1){
-    double seconds = (System.nanoTime() - t1) / 1000000000.0;
+    double seconds = (double)(System.nanoTime() - t1) / 1000000000.0;
+    //double seconds = (System.nanoTime() - t1) / 1000000000.0;
     if (recordPerf){
-      String sql = "upsert into perf values ('"+testName+"','"+metric+"',"+ threadId + "," + rep + ",'" + now() + "'," + String.valueOf(count/seconds)+")";
       try{
-        connection.createStatement().execute(sql);
+        perfStatement.setString(1, testName);
+        perfStatement.setString(2, metric);
+        perfStatement.setInt(3, threadId);
+        perfStatement.setInt(4, rep);
+        perfStatement.setObject(5, now());
+        perfStatement.setObject(6, count/seconds);
+        perfStatement.executeUpdate();
         connection.commit();
       } catch (SQLException e) { e.printStackTrace(); }
     }
