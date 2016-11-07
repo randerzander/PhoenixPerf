@@ -25,13 +25,21 @@
     </repositories>
 
     <properties>
-      <phoenix.version>4.7.0-HBase-1.1</phoenix.version>
+      <!-- Local dev artifact -->
+      <!-- <phoenix.version>4.7.1-HBase-1.1-SNAPSHOT</phoenix.version> -->
+      <!-- Apache artifact version -->
+      <phoenix.version>4.8.0-HBase-1.1</phoenix.version>
+      <!-- Hortonworks artifact version -->
+      <!-- <phoenix.version>4.7.0.2.5.0.0-1245</phoenix.version> -->
     </properties>
 
     <dependencies>
       <dependency>
         <groupId>org.apache.phoenix</groupId>
-        <artifactId>phoenix-server-client</artifactId>
+        <!-- Phoenix 4.7 artifact name -->
+        <!-- <artifactId>phoenix-server-client</artifactId> -->
+        <!-- Phoenix 4.8 artifact name -->
+        <artifactId>phoenix-queryserver-client</artifactId>
         <version>${phoenix.version}</version>
       </dependency>
     </dependencies>

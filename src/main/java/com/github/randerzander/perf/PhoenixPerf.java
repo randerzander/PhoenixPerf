@@ -23,10 +23,9 @@ public class PhoenixPerf {
       //Load and run setup statements
       if (props.get("setupQueryDir") != null){
         for (File file : new File(props.get("setupQueryDir")).listFiles()) {
-            System.out.println("Running setup file: " + file.getPath());
             try{
               for (String statement : new Scanner(file).useDelimiter("\\Z").next().split(";")){
-                System.out.println("Running: \n" + statement);
+                System.out.println("From " + file.getPath() + ", running: \n" + statement);
                 connection.createStatement().execute(statement);
               }
             } catch (java.io.FileNotFoundException e) { e.printStackTrace(); System.exit(-1); }
