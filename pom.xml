@@ -28,7 +28,7 @@
       <!-- Local dev artifact -->
       <!-- <phoenix.version>4.7.1-HBase-1.1-SNAPSHOT</phoenix.version> -->
       <!-- Apache artifact version -->
-      <phoenix.version>4.8.0-HBase-1.1</phoenix.version>
+      <phoenix.version>4.9.0-HBase-1.2</phoenix.version>
       <!-- Hortonworks artifact version -->
       <!-- <phoenix.version>4.7.0.2.5.0.0-1245</phoenix.version> -->
     </properties>
