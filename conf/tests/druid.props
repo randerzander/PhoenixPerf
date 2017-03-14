@@ -1,7 +1,7 @@
 testName=read-druid
 recordPerf=false
 jdbc.url=jdbc:calcite:schemaFactory=org.apache.calcite.adapter.druid.DruidSchemaFactory
-repetitions=1
+repetitions=5
 readCount=100
-readThreads=1
+readThreads=10
 readQueryDir=conf/druid-queries
