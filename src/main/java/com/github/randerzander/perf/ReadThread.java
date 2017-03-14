@@ -39,13 +39,14 @@ public class ReadThread implements Runnable {
       for (File file : new File(props.get("readQueryDir")).listFiles()) {
         if (i++ % (threadId+1) == 0){
           try{
+            System.err.println(file);
             readStatement = connection.prepareStatement(new Scanner(file).useDelimiter("\\Z").next());
           } catch (java.io.FileNotFoundException e) { e.printStackTrace(); System.exit(-1); }
           metric = file.getPath();
         }
       }
 
-      perfStatement = connection.prepareStatement("upsert into perf values (?, ?, ?, ?, ?, ?)");
+      if (recordPerf) perfStatement = connection.prepareStatement("upsert into perf values (?, ?, ?, ?, ?, ?)");
     } catch (SQLException e) { e.printStackTrace(); }
   }
 
