@@ -1,10 +1,10 @@
 testName=read-default
-recordPerf=true
+recordPerf=false
 # Thick Client JDBC string
 #jdbc.url=jdbc:phoenix:localhost:2181:/hbase
 # Thin Client JDBC string
-jdbc.url=jdbc:phoenix:thin:url=http://localhost:8765;serialization=PROTOBUF
-repetitions=100
-readCount=100
-readThreads=10
-readQueryDir=conf/queries
+jdbc.url=jdbc:hive2://localhost:10500
+repetitions=1
+readCount=1
+readThreads=1
+readQueryDir=conf/hive-queries

@@ -21,6 +21,8 @@ public class WriteThread implements Runnable {
   private PreparedStatement writeStatement;
   private PreparedStatement perfStatement;
   private ResultSetMetaData columns;
+  private String verb;
+  private boolean useCommits;
 
   boolean recordPerf;
   private String testName;
@@ -31,6 +33,8 @@ public class WriteThread implements Runnable {
   public WriteThread(int threadId, HashMap<String, String> props){
     this.threadId = threadId;
     this.props = props;
+    this.verb = (props.get("jdbc.url").contains("phoenix")) ? "upsert" : "insert";
+    this.useCommits = !props.get("jdbc.url").contains("hive2");
 
     repetitions = Integer.parseInt(props.get("repetitions"));
     count = Integer.parseInt(props.get("writeCount"));
@@ -43,7 +47,8 @@ public class WriteThread implements Runnable {
     maxVal = Integer.parseInt(props.get("maxVal"));
 
     try{
-      connection = DriverManager.getConnection(props.get("jdbc.url"), "", "");
+      //connection = DriverManager.getConnection(props.get("jdbc.url"), "", "");
+      connection = DriverManager.getConnection(props.get("jdbc.url"));
       connection.setAutoCommit(props.get("autocommit").equals("true"));
     } catch (SQLException e) { e.printStackTrace(); System.exit(-1); }
 
@@ -55,12 +60,13 @@ public class WriteThread implements Runnable {
       String prefix = (writeColumns == null) ? "select *" : "select " + columns;
       columns = connection.createStatement().executeQuery(prefix + " from " + writeTable + " limit 0").getMetaData();
       for (int i = 1; i <= columns.getColumnCount(); i++){
-        columnNames += columns.getColumnName(i) + ",";
+        columnNames += columns.getColumnName(i).split("\\.")[1] + ",";
         values += "?,";
       }
       columnNames = columnNames.substring(0, columnNames.length() - 1) + ")";
       values = values.substring(0, values.length() - 1) + ")";
-      writeStatement = connection.prepareStatement("upsert into " + writeTable + " " + columnNames + " values " + values);
+      System.out.println(verb + " into " + writeTable + " " + columnNames + " values " + values);
+      writeStatement = connection.prepareStatement(verb + " into " + writeTable + " " + columnNames + " values " + values);
       perfStatement = connection.prepareStatement("upsert into perf values (?, ?, ?, ?, ?, ?)");
     } catch (SQLException e) { e.printStackTrace(); System.exit(-1); }
   }
@@ -71,7 +77,7 @@ public class WriteThread implements Runnable {
     long start = System.nanoTime();
     for (int i = 0; i < repetitions; i++){
       long t1 = System.nanoTime();
-      for (int j = 0; j < count; j++) write(j % commitInterval == 0);
+      for (int j = 0; j < count; j++) write(useCommits && (j % commitInterval == 0));
       perf(threadId, i, t1);
     }
 
