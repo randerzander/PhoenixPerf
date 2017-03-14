@@ -1,18 +1,25 @@
 The goals of this project are:
 
-1. Provide a simple example of a Java application interacting with [Apache Phoenix](http://phoenix.apache.org/) & [Apache HBase](http://hbase.apache.org/) via the Phoenix JDBC driver.
-2. Act as a flexible performance testing tool for a variety of read and write workloads
+1. Provide a sample Java application that aids in testing SQL query interfaces including..
+  a. [Apache Phoenix](http://phoenix.apache.org/)/[Apache HBase](http://hbase.apache.org/)
+  b. [Apache Calcite](https://calcite.apache.org/)
+  c. [Apache Hive](http://hive.apache.org/)
 
 ##Build:##
 
-**Build for Thin JDBC Client**
+**Build for Phoenix Thin JDBC Client**
 ```
 mvn clean package
 ```
 
-**Build for Thick JDBC Client**
+**Build for Phoenix Thick JDBC Client**
 ```
 mvn clean package -P thick
+```
+
+**Build for Calcite Druid Adapter**
+```
+mvn clean package -P calcite
 ```
 
 ##Running Performance Tests:##
